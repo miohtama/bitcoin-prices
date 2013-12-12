@@ -7,7 +7,6 @@
     <script src="//code.jquery.com/jquery-2.0.3.min.js" />
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 
-    <script src="bitcoinaverage.js"></script>
     <script>
         window.bitcoinAverage = {
             // Where we get data
@@ -15,11 +14,22 @@
             // Which currencies we allow
             currencies: ["BTC", "USD", "EUR", "CHN"],
             // Special currency symbol artwork
-            currencySymbols: {
+            symbols: {
                 "BTC": "<i class='icon icon-btc'></i>"
-            }
+            },
+
+            // Which currency we show user by the default if
+            // no currency is selected
+            defaultCurrency: "BTC"
         };
     </script>
+    <script src="bitcoinaverage.js"></script>
+    <style type="text/css">
+        .clickable-price {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container" style="min-height:480px;">
