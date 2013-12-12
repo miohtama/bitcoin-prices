@@ -1,0 +1,33 @@
+<html>
+<head>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="//code.jquery.com/jquery-2.0.3.min.js" />
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+    <script src="bitcoinaverage.js"></script>
+    <script>
+        window.bitcoinAverage = {
+            // Where we get data
+            url: "https://api.bitcoinaverage.com/ticker/all",
+            // Which currencies we allow
+            currencies: ["BTC", "USD", "EUR", "CHN"],
+            // Special currency symbol artwork
+            currencySymbols: {
+                "BTC": "<i class='icon icon-btc'></i>"
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container" style="min-height:480px;">
+
+        <h1>bitcoinaverage.js client tests</h1>
+
+        <div>Some price in bitcoins: <abbr data-btc-price="1.0">1.0 BTC</abbr></div>
+
+        <span class="danger">Cheaper price! <abbr data-btc-price="0.1">1.0 BTC</abbr></span>
+    </div>
+</body>
