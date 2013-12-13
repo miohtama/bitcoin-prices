@@ -33,6 +33,8 @@
             $.getJSON(self.config.url, function(resp) {
                 self.data = resp;
                 $(document).trigger("marketdataavailable");
+            }).error(function() {
+                throw new Error("Could not load exchage rate data from:" + self.config.url);
             });
         },
 
@@ -158,9 +160,10 @@
                     return;
                 }
 
+                var priceSymbol = elem.attr("data-price-symbol") != "off";
                 var inCurrentCurrency = self.convert(btcPrice, "BTC", currentCurrency);
 
-                elem.html(self.formatPrice(inCurrentCurrency, currentCurrency, true));
+                elem.html(self.formatPrice(inCurrentCurrency, currentCurrency, priceSymbol));
 
             });
         },
