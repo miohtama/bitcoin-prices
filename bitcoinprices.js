@@ -169,6 +169,13 @@
         },
 
         /**
+         * Update currency symbols on the page which are not directly associated with a price.
+         */
+        updateCurrencySymbols : function() {
+            $(".current-currency-symbol").html(this.getCurrencySymbol(this.getActiveCurrency()));
+        },
+
+        /**
          * Get the currency selected by the user.
          */
         getActiveCurrency : function() {
@@ -219,6 +226,7 @@
             // We have now market data available,
             // decoreate elements so the user knows there is interaction
             $("[data-btc-price]").addClass("clickable-price");
+            $(".current-currency-symbol").addClass("clickable-price");
             $(".clickable-price").click(onclick);
         },
 
@@ -293,6 +301,7 @@
             // Whenever some UX element updates the active currency then refresh the page
             $(document).bind("activecurrencychange", function() {
                 self.updatePrices();
+                self.updateCurrencySymbols();
             });
 
         },
@@ -308,6 +317,7 @@
 
             $(document).bind("marketdataavailable", function() {
                 self.updatePrices();
+                self.updateCurrencySymbols();
                 self.installUX();
             });
 
