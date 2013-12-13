@@ -16,15 +16,13 @@
 
     "use strict";
 
-    var config = window.bitcoinAverage;
+    var bitcoinprices = {
 
-    if(!config || !config.url) {
-        throw new Error("bitcoinaverage.js not configured properly");
-    }
+        /** Store exchange rate data as returned by bitcoinaverages.com */
+        data : null,
 
-    var data = null;
-
-    var bitcoinprice = {
+        /** Our configuration options */
+        config : null,
 
         /**
          * Update market rate data from the server using JSON AJAX request.
@@ -36,43 +34,65 @@
 
             var self = this;
 
-            $.getJSON(config.url, function(resp) {
-                data = resp;
-                $(document).tigger("marketdataavailable");
+            $.getJSON(self.config.url, function(resp) {
+                self.data = resp;
+                $(document).trigger("marketdataavailable");
             });
         },
 
         /**
          * Convert between BTC and fiat currecy.
-         */
-        convert : function(amount, sourceCurrency, targetCurrency)  {
-
-        },
-
-        /**
-         * Get the currency selected by the user.
-         */
-        getActiveCurrency : function() {
-            return window.localStorage["bitcoinaverage.currency"] || config.defaultCurrency || "BTC";
-        },
-
-        /**
-         * Loop available currencies, select next one.
          *
-         * @return {String} user-selected next three-letter currency code
+         * @param  {Number} amount Currency amount to convert
+         * @param  {String} source Three-letter currency code
+         * @param  {String} target Three-letter currency code
+         * @return {Number}        Amount in other currency
          */
-        toggleNextActiveCurrency : function() {
+        convert : function(amount, source, target)  {
 
-            var currency = getActiveCurrency();
-            var idx = $.inArray(currency, config.currencies);
-            if(idx < 0) {
-                idx = 0;
+            var inverse;
+
+            if(!source || !target) {
+                throw new Error("You need to give both source and target currency:" + source + " " + target);
             }
-            idx = (++idx) % config.currencies.length;
 
-            currency = window.localStorage["bitcoinaverage.currency"] = config.currencies[idx];
+            // No conversion
+            if(source == "BTC" && target == "BTC") {
+                return amount;
+            }
 
-            return currency;
+            if(!(source == "BTC" || target == "BTC")) {
+                throw new Error("Either source or target currency must be BTC");
+            }
+
+            if(source == "BTC") {
+                inverse = true;
+                // http://stackoverflow.com/a/16201730/315168
+                target = [source, source = target][0];
+            } else {
+                inverse = false;
+            }
+
+            if(!this.data) {
+                throw new Error("Exchange rate data not available");
+            }
+
+            var currencyData = this.data[source];
+            if(!currencyData) {
+                throw new Error("We do not have market data for currency: " + source);
+            }
+
+            var rate = currencyData[this.config.marketRateVariable];
+
+            if(!rate) {
+                throw new Error("Cannot parse bitcoinaverage data for " + source + " " + this.config.url);
+            }
+
+            if(inverse) {
+                return amount*rate;
+            } else {
+                return amount/rate;
+            }
         },
 
         /**
@@ -85,8 +105,26 @@
          * @return {String} HTML snippet
          */
         formatPrice : function (amount, currency) {
-            var symbols = config.symbols || {};
-            var symbol = config.symbols[currency] || currency;
+
+            var decimals;
+
+            if(currency == "BTC") {
+                decimals = 8;
+            } else {
+                decimals = 2;
+            }
+
+            return amount.toFixed(decimals) + " " + this.getCurrencySymbol(currency);
+        },
+
+        /**
+         * Get HTML for a currency symbol
+         * @param  {String} currency Three-letter currency code
+         */
+        getCurrencySymbol : function(currency) {
+            var symbols = this.config.symbols || {};
+            var symbol = this.config.symbols[currency] || currency;
+            return symbol;
         },
 
         /**
@@ -98,8 +136,7 @@
         updatePrices : function() {
 
             var self = this;
-            var currentCurrency = getActiveCurrency();
-
+            var currentCurrency = this.getActiveCurrency();
 
             // Find all elements which declare themselves to present BTC prices
             $("[data-btc-price]").each(function() {
@@ -113,7 +150,7 @@
                     return;
                 }
 
-                var inCurrentCurrency = convertBTCToCurrency(btcPrice, currentCurrency);
+                var inCurrentCurrency = self.convert(btcPrice, "BTC", currentCurrency);
 
                 elem.html(self.formatPrice(inCurrentCurrency, currentCurrency));
 
@@ -121,11 +158,108 @@
         },
 
         /**
+         * Get the currency selected by the user.
+         */
+        getActiveCurrency : function() {
+            return window.localStorage["bitcoinprices.currency"] || this.config.defaultCurrency || "BTC";
+        },
+
+        /**
+         * If we have an active currency which is not provided by current data return to BTC;
+         */
+        resetCurrency : function() {
+            var currency = this.getActiveCurrency();
+            var idx = $.inArray(currency, this.config.currencies);
+            if(idx < 0) {
+                window.localStorage["bitcoinprices.currency"] = "BTC";
+            }
+        },
+
+        /**
+         * Loop available currencies, select next one.
+         *
+         * @return {String} user-selected next three-letter currency code
+         */
+        toggleNextActiveCurrency : function() {
+
+            var currency = this.getActiveCurrency();
+            var idx = $.inArray(currency, this.config.currencies);
+            if(idx < 0) {
+                idx = 0;
+            }
+            idx = (++idx) % this.config.currencies.length;
+
+            currency = window.localStorage["bitcoinprices.currency"] = this.config.currencies[idx];
+
+            return currency;
+        },
+
+        /**
          * User changes the default currency through clicking a price.
          */
-        onClickPrice : function() {
-            selectNextCurrency();
-            updatePrices();
+        installClicker : function() {
+            var self = this;
+            function onclick() {
+                self.toggleNextActiveCurrency();
+                $(document).trigger("activecurrencychange");
+            }
+
+            // We have now market data available,
+            // decoreate elements so the user knows there is interaction
+            $("[data-btc-price]").addClass("clickable-price");
+            $(".clickable-price").click(onclick);
+        },
+
+        /**
+         * Populate Bootstrap dropdown menu "currency-dropdown" with available currency choices.
+         *
+         * Automatically toggle the currently activated currency.
+         */
+        installCurrencyMenu : function() {
+            var self = this;
+            var menu = $(".currency-dropdown");
+
+            function updateCurrencyInMenu(currency) {
+                var symbol = self.getCurrencySymbol(currency);
+                menu.find(".currency-symbol").html(symbol);
+                menu.find("li[data-currency]").removeClass("active");
+                menu.find("li[data-currency=" + currency + "]").addClass("active");
+            }
+
+            function buildMenu() {
+
+                $.each(self.config.currencies, function() {
+                    var symbol = self.getCurrencySymbol(this);
+                    var template = [
+                        "<li class='currency-menu-entry' data-currency='",
+                        this,
+                        "'><a role='menuitem' href='#'>",
+                        symbol,
+                        "</a></li>"
+                    ];
+
+                    var html = template.join("");
+                    menu.find("ul").append(html);
+                });
+            }
+
+
+            buildMenu();
+
+            $(document).on("activecurrencychange", function() {
+                var active = self.getActiveCurrency();
+                updateCurrencyInMenu(active);
+            });
+
+            menu.on("click", ".currency-menu-entry", function() {
+                var currency = $(this).attr("data-currency");
+                window.localStorage["bitcoinprices.currency"] = currency;
+                $(document).trigger("activecurrencychange");
+            });
+
+            // Initialize the currency from what the user had on the last page load
+            var active = this.getActiveCurrency();
+            updateCurrencyInMenu(active);
         },
 
         /**
@@ -133,15 +267,21 @@
          *
          * Assume we have market data available.
          */
-        enableCurrencyChange : function() {
+        installUX : function() {
             var self = this;
 
-            // We have now market data available,
-            // decoreate elements so the user knows there is interaction
-            $("[data-btc-price]").addClass("clickable-price");
-            if(config.ux.clickPrices) {
-                $(".clickable-price").click(function() { self.onClickPrice(); });
+            if(self.config.ux.clickPrices) {
+                this.installClicker();
             }
+
+            if(self.config.ux.menu) {
+                this.installCurrencyMenu();
+            }
+
+            // Whenever some UX element updates the active currency then refresh the page
+            $(document).bind("activecurrencychange", function() {
+                self.updatePrices();
+            });
 
         },
 
@@ -152,15 +292,18 @@
         init : function(_config) {
 
             var self = this;
-            config = _config;
+            this.config = _config;
 
             $(document).bind("marketdataavailable", function() {
                 self.updatePrices();
-                self.enableCurrencyChange();
+                self.installUX();
             });
 
             this.loadData();
         }
     };
+
+    // export
+    window.bitcoinprices = bitcoinprices;
 
 })(jQuery);

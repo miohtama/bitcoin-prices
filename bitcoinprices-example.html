@@ -1,50 +1,99 @@
+<!DOCTYPE html>
 <html>
 <head>
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-    <script src="//code.jquery.com/jquery-2.0.3.min.js" />
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
-    <script src="bitcoinaverage.js"></script>
+    <script src="bitcoinprices.js"></script>
     <script>
-        $(document).ready(bitcoinprices.init, {
-            // Where we get data
-            url: "https://api.bitcoinaverage.com/ticker/all",
-            // Which currencies we allow
-            currencies: ["BTC", "USD", "EUR", "CHN"],
-            // Special currency symbol artwork
-            symbols: {
-                "BTC": "<i class='icon icon-btc'></i>"
-            },
+        $(document).ready(function() {
+            bitcoinprices.init({
 
-            // Which currency we show user by the default if
-            // no currency is selected
-            defaultCurrency: "BTC",
+                // Where we get bitcoinaverage data
+                url: "https://api.bitcoinaverage.com/ticker/all",
 
-            // How the user is able to interact with the prices
-            ux : {
-                clickPrices : true,
-                tooltip : true,
-                menu : true,
-            }
+                // Which of bitcoinaverages value we use to present prices
+                marketRateVariable: "24h_avg",
+
+                // Which currencies are in shown to the user
+                currencies: ["BTC", "USD", "EUR", "CNY"],
+
+                // Special currency symbol artwork
+                symbols: {
+                    "BTC": "<i class='fa fa-btc'></i>"
+                },
+
+                // Which currency we show user by the default if
+                // no currency is selected
+                defaultCurrency: "BTC",
+
+                // How the user is able to interact with the prices
+                ux : {
+                    clickPrices : true,
+                    menu : true,
+                }
+            });
         });
     </script>
     <style type="text/css">
         .clickable-price {
-            text-decoration: underline;
             cursor: pointer;
+            border-bottom: 1px #888 dashed;
+        }
+
+        .label[data-btc-price] {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
+
+    <div class="navbar navbar-default" id="navbar-site">
+        <div class="navbar-inner">
+            <div class="container">
+
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="{% url index %}">bitcoin-prices.js</a>
+                </div>
+
+                <ul class="nav navbar-nav">
+                  <li class="dropdown currency-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Currency: <span class="currency-symbol">BTC</span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    </ul>
+                  </li>
+                </ul>
+
+             </div>
+         </div>
+    </div>
+
+
     <div class="container" style="min-height:480px;">
 
-        <h1>bitcoinaverage.js client tests</h1>
+        <h1>bitcoin-prices.js - human-friendly BTC prices for desktop and mobile devices</h1>
 
-        <div>Some price in bitcoins: <abbr data-btc-price="1.0">1.0 BTC</abbr></div>
+        <p>
+            <div>Example price: <span data-btc-price="1.0">1.0 BTC</span></div>
+        </p>
 
-        <span class="danger">Cheaper price! <abbr data-btc-price="0.1">1.0 BTC</abbr></span>
+        <p>
+            <span class="label label-danger">Example special price: <span data-btc-price="0.1">1.0 BTC</span></span>
+        </p>
+
+        <p>
+            Another Example special price: <span class="label label-warning" data-btc-price="0.1">1.0 BTC</span>
+        </p>
+
+
     </div>
 </body>
