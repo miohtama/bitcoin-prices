@@ -2,13 +2,14 @@
 <head>
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet" />
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
     <script src="//code.jquery.com/jquery-2.0.3.min.js" />
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 
+    <script src="bitcoinaverage.js"></script>
     <script>
-        window.bitcoinAverage = {
+        $(document).ready(bitcoinprices.init, {
             // Where we get data
             url: "https://api.bitcoinaverage.com/ticker/all",
             // Which currencies we allow
@@ -20,10 +21,16 @@
 
             // Which currency we show user by the default if
             // no currency is selected
-            defaultCurrency: "BTC"
-        };
+            defaultCurrency: "BTC",
+
+            // How the user is able to interact with the prices
+            ux : {
+                clickPrices : true,
+                tooltip : true,
+                menu : true,
+            }
+        });
     </script>
-    <script src="bitcoinaverage.js"></script>
     <style type="text/css">
         .clickable-price {
             text-decoration: underline;
