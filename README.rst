@@ -36,6 +36,8 @@ Demos
 Installation
 -------------
 
+No server-side components needed.
+
 You must have `jQuery <http://jquery.com>` (version 1.9 or later) installed.
 
 Put ``bitcoinprices.js`` in your application.
