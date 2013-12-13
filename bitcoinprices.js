@@ -1,11 +1,7 @@
 /**
- * bitcoinaverage.js
+ * bitcoinprices.js
  *
  * Display human-friendly bitcoin prices, both desktop and mobile.
- *
- * Make BTC prices clickable and convert them to different currencies in-fly.
- * Uses bitcoinaverage.com API for exchange rates data.
- * Requires jQuery + Bootstrap.js for fully functionality.
  *
  * Copyright 2013 Mikko Ohtamaa http://opensourcehacker.com
  *
