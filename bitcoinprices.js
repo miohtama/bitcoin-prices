@@ -52,6 +52,10 @@
 
             var inverse;
 
+            if(!$.isNumeric(amount)) {
+                throw new Error("Amount must be numeric");
+            }
+
             if(!source || !target) {
                 throw new Error("You need to give both source and target currency:" + source + " " + target);
             }
@@ -62,7 +66,8 @@
             }
 
             if(!(source == "BTC" || target == "BTC")) {
-                throw new Error("Either source or target currency must be BTC");
+                // Convert through BTC
+                return this.convert(this.convert(amount, source, "BTC"), "BTC", target);
             }
 
             if(source == "BTC") {
@@ -101,10 +106,11 @@
          * Fills in currency symbols we have configured.
          *
          * @param  {Number} amount
-         * @param  {String} currency three letter currency code
+         * @param  {String} currency Three letter currency code
+         * @param  {Boolean} symbol Add currency symbol
          * @return {String} HTML snippet
          */
-        formatPrice : function (amount, currency) {
+        formatPrice : function (amount, currency, symbol) {
 
             var decimals;
 
@@ -114,7 +120,13 @@
                 decimals = 2;
             }
 
-            return amount.toFixed(decimals) + " " + this.getCurrencySymbol(currency);
+            var formatted = amount.toFixed(decimals);
+
+            if(symbol) {
+                formatted += " " + this.getCurrencySymbol(currency);
+            }
+
+            return formatted;
         },
 
         /**
@@ -152,7 +164,7 @@
 
                 var inCurrentCurrency = self.convert(btcPrice, "BTC", currentCurrency);
 
-                elem.html(self.formatPrice(inCurrentCurrency, currentCurrency));
+                elem.html(self.formatPrice(inCurrentCurrency, currentCurrency, true));
 
             });
         },

@@ -2,6 +2,8 @@
 <html>
 <head>
 
+    <title>bitcoin-prices.js - show bitcoin prices on web and mobile HTML pages</title>
+
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.no-icons.min.css" rel="stylesheet" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
@@ -39,6 +41,45 @@
             });
         });
     </script>
+
+
+    <script>
+        // Manual conversion example
+        $(document).on("marketdataavailable", function() {
+            var inputAmount = $("#input-amount");
+            var outputAmount = $("#output-amount");
+            var inputCurrency = $("#input-currency");
+            var outputCurrency = $("#output-currency");
+
+            function updateConversion() {
+
+                // Reset output in the case we run into exception
+                outputAmount.val("");
+
+                var input = inputCurrency.val();
+                var output = outputCurrency.val();
+                var amount = parseFloat(inputAmount.val(), 10);
+                try {
+                    var val = bitcoinprices.convert(amount, input, output);
+                    val = bitcoinprices.formatPrice(val, output, false);
+                    outputAmount.val(val);
+                } catch(e) {
+                    throw e;
+                }
+            }
+
+            inputAmount.change(updateConversion);
+            inputAmount.on("keyup", updateConversion);
+            inputCurrency.change(updateConversion);
+            outputCurrency.change(updateConversion);
+
+            // Initial take off
+            updateConversion();
+
+        });
+    </script>
+
+
     <style type="text/css">
         .clickable-price {
             cursor: pointer;
@@ -73,6 +114,13 @@
                   </li>
                 </ul>
 
+                <div class="nav navbar-nav navbar-right">
+                    <a class="navbar-brand" href="http://opensourcehacker.com"><i class="fa fa-star"></i> By Mikko Ohtamaa</a>
+                    <a class="navbar-brand" href="http://opensourcehacker.com"><i class="fa fa-rss"></i></a>
+                    <a class="navbar-brand" href="http://twitter.com/moo9000"><i class="fa fa-twitter"></i></a>
+                    <a class="navbar-brand" href="https://www.facebook.com/pages/Open-Source-Hacker/181710458567630"><i class="fa fa-facebook"></i></a>
+                </div>
+
              </div>
          </div>
     </div>
@@ -80,7 +128,17 @@
 
     <div class="container" style="min-height:480px;">
 
-        <h1>bitcoin-prices.js - human-friendly BTC prices for desktop and mobile devices</h1>
+        <div class="jumbotron">
+          <h1>bitcoin-prices.js</h1>
+          <p>JavaScript library for human-friendly bitcoin price presentation</p>
+          <p><a class="btn btn-primary btn-lg" role="button"><i class="fa fa-github"></i> View on Github</a></p>
+        </div>
+
+        <h2>Price example</h2>
+
+        <p class="text text-muted">
+            Click to convert between BTC and fiat currency.
+        </p>
 
         <p>
             <div>Example price: <span data-btc-price="1.0">1.0 BTC</span></div>
@@ -94,6 +152,50 @@
             Another Example special price: <span class="label label-warning" data-btc-price="0.1">1.0 BTC</span>
         </p>
 
+        <h2>Manual currency conversion</h2>
+
+        <p class="text text-muted">
+            Demostrate <code>bitcoinprices.convert()</code> to convert between currencies.
+        </p>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Input</h2>
+                <h4>Amount</h4>
+                <p>
+                    <input id="input-amount" value="1.0">
+                </p>
+                <h4>Currency</h4>
+                <select id="input-currency">
+                    <option selected value="BTC">BTC</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <h2>Output</h2>
+
+                <h4>Amount</h4>
+                <p>
+                    <input id="output-amount" readonly>
+                </p>
+
+                <h4>Currency</h4>
+                <select id="output-currency">
+                    <option value="BTC">BTC</option>
+                    <option selected value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <p class="text text-success lead text-center" style="margin-top: 3em">
+                <a href="https://github.com/miohtama/bitcoin-prices"><i class="fa fa-github"></i> Visit Github repository for more information</a>
+            </p>
+        </div>
 
     </div>
 </body>
