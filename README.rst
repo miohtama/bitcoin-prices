@@ -106,6 +106,11 @@ Your templating language must output Bitcoin prices with `data-btc-price` attrib
 It is suggested that you cache bitcoinaverage.com API output on a local server with proper
 cache headers. This may considerably speed up your site and reduces bitcoinaverage.com load.
 
+Other
+------
+
+`See also server-side Python implementation for converting Bitcoin prices <https://gist.github.com/miohtama/7814435>`_.
+
 Author
 ------
 
