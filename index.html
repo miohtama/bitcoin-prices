@@ -84,6 +84,11 @@
 
 
     <style type="text/css">
+
+        body {
+            padding-top: 60px;
+        }
+
         .clickable-price {
             cursor: pointer;
             border-bottom: 1px #888 dashed;
@@ -96,7 +101,7 @@
 </head>
 <body>
 
-    <div class="navbar navbar-default" id="navbar-site">
+    <div class="navbar navbar-fixed-top navbar-default" id="navbar-site">
         <div class="navbar-inner">
             <div class="container">
 
@@ -106,12 +111,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand" href="{% url index %}">bitcoin-prices.js</a>
+                  <a class="navbar-brand" href="#">bitcoinprices.js</a>
                 </div>
 
                 <ul class="nav navbar-nav">
                   <li class="dropdown currency-dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Currency: <span class="currency-symbol">BTC</span><b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-money"></i> <span class="currency-symbol">BTC</span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                     </ul>
                   </li>
@@ -132,15 +137,22 @@
     <div class="container" style="min-height:480px;">
 
         <div class="jumbotron">
-          <h1>bitcoin-prices.js</h1>
-          <p>JavaScript library for human-friendly bitcoin price presentation</p>
+          <h1>bitcoinprices.js</h1>
+          <p>JavaScript library for human-friendly Bitcoin price presentation</p>
           <p><a class="btn btn-primary btn-lg" role="button"><i class="fa fa-github"></i> View on Github</a></p>
         </div>
+
+        <p>
+            <code>bitcoinprices.js</code> is a JavaScript library which you can drop on your web page.
+            It presents the Bitcoin prices in the fiat currency chosen by the user, making prices
+            friendly to read.
+            <code>bitcoinprices.js</code> works on any HTML page.
+        </p>
 
         <h2>Price example</h2>
 
         <p class="text text-muted">
-            Click to convert between BTC and fiat currency.
+            Click the price to convert between BTC and fiat currency or choose from the menu above.
         </p>
 
         <p>

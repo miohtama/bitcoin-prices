@@ -211,7 +211,8 @@
          */
         installClicker : function() {
             var self = this;
-            function onclick() {
+            function onclick(e) {
+                e.preventDefault();
                 self.toggleNextActiveCurrency();
                 $(document).trigger("activecurrencychange");
             }
@@ -245,7 +246,7 @@
                     var template = [
                         "<li class='currency-menu-entry' data-currency='",
                         this,
-                        "'><a role='menuitem' href='#'>",
+                        "'><a role='menuitem'>",
                         symbol,
                         "</a></li>"
                     ];
@@ -263,7 +264,7 @@
                 updateCurrencyInMenu(active);
             });
 
-            menu.on("click", ".currency-menu-entry", function() {
+            menu.on("click", ".currency-menu-entry", function(e) {
                 var currency = $(this).attr("data-currency");
                 window.localStorage["bitcoinprices.currency"] = currency;
                 $(document).trigger("activecurrencychange");
