@@ -1,0 +1,23 @@
+{
+  "name": "bitcoinprices",
+  "version": "0.2.0",
+  "description": "bitcoinprices.js is a JavaScript library for presenting Bitcoin prices in human-friendly manner in web",
+  "main": "bitcoinprices.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/miohtama/bitcoin-prices.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "exchange rate",
+    "market data",
+    "currency"
+  ],
+  "author": "Mikko Ohtamaa",
+  "license": "MIT",
+  "readmeFilename": "README.rst",
+  "gitHead": "e82642f0316f9391502a26cedffced0cee0b7366"
+}
