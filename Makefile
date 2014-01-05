@@ -1,7 +1,17 @@
-all: test
+BIN=node_modules/.bin
 
+all: clean test distribution
+
+# What we need to test and build distro
 setup:
-	npm install mocha
+	npm install .
+
+clean:
+	rm dist/* > /dev/nul
+
+distribution:
+	$(BIN)/browserify bitcoinprices.js > dist/bitcoinprices.js
+	$(BIN)/browserify bitcoinprices.js | $(BIN)/uglifyjs > dist/bitcoinprices.min.js
 
 test:
-	node_modules/mocha/bin/mocha
+	$(BIN)/mocha-phantomjs tests/tests.html

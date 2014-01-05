@@ -10,32 +10,27 @@
 
 /* global define */
 
-// UMD boilerplate, shamelessly stolen from Backbone
-// https://github.com/jashkenas/backbone/blob/master/backbone.js
-(function(root, factory) {
+// UMD boilerplate
+// https://github.com/umdjs/umd/blob/master/returnExports.js
+(function (root, factory) {
 
-  // Set up Backbone appropriately for the environment. Start with AMD.
-  if (typeof define === 'function' && define.amd) {
-    define(['jquery', 'exports'], function($, exports) {
-      // Export global even in AMD case in case this script is loaded with
-      // others that may still expect a global Backbone.
-      root.Backbone = factory(root, exports, $);
-    });
-
-  // Next for Node.js or CommonJS. jQuery may not be needed as a module.
-  } else if (typeof exports !== 'undefined') {
-    try { $ = require('jquery'); } catch(e) {}
-    factory(root, exports, $);
-
-  // Finally, as a browser global.
-  } else {
-    root.bitcoinprices = factory(root, {}, (root.jQuery || root.Zepto || root.ender || root.$));
-  }
-}(this, function(root, bitcoinprices, $) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jQuery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like enviroments that support module.exports,
+        // like Node.
+        module.exports = factory(require('jQuery'));
+    } else {
+        // Browser globals (root is window)
+        root.bitcoinprices = factory(root.jQuery);
+    }
+}(this, function ($) {
 
     "use strict";
 
-    $.extend(bitcoinprices, {
+    return {
 
         /** Store exchange rate data as returned by bitcoinaverages.com */
         data : null,
@@ -286,7 +281,6 @@
                 });
             }
 
-
             buildMenu();
 
             $(document).on("activecurrencychange", function() {
@@ -335,19 +329,24 @@
          */
         init : function(_config) {
 
+            if(!_config) {
+                throw new Error("You must give config object");
+            }
+
             var self = this;
             this.config = _config;
 
-            $(document).bind("marketdataavailable", function() {
-                self.updatePrices();
-                self.updateCurrencySymbols();
-                self.installUX();
-            });
+            if(this.config.url) {
+                // Chec we are not running headless testing mode
+                $(document).bind("marketdataavailable", function() {
+                    self.updatePrices();
+                    self.updateCurrencySymbols();
+                    self.installUX();
+                });
 
-            this.loadData();
+                this.loadData();
+            }
+
         }
-    });
-
-    return bitcoinprices;
-
+    };
 }));

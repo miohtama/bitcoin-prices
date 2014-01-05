@@ -4,7 +4,7 @@
   "description": "bitcoinprices.js is a JavaScript library for presenting Bitcoin prices in human-friendly manner in web",
   "main": "bitcoinprices.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha-phantomjs tests/tests.html"
   },
   "repository": {
     "type": "git",
@@ -18,25 +18,25 @@
   ],
   "author": "Mikko Ohtamaa <mikko@opensourcehacker.com> (http://opensourcehacker.com)",
   "license": "MIT",
-  "readmeFilename": "README.rst",
-  "gitHead": "e82642f0316f9391502a26cedffced0cee0b7366",
-
-  "devDependencies": { "mocha": "~1.7.4" },
-  "testling": {
-    "browsers": [
-        "ie9", "ie10", "ie11",
-        "firefox/15", "chrome/22", "opera/12", "safari/5.1"
-    ],
-    "harness" : "mocha",
-    "files": "test.js"
+  "dependencies": {
+    "jquery": ">=2.0.0 <3"
   },
-
+  "devDependencies": {
+    "jquery": "2.1.0-beta3",
+    "mocha": "~1.16.2",
+    "chai": "~1.8.1",
+    "mocha-phantomjs": "~3.3.1",
+    "phantomjs": "~1.9.2-6",
+    "uglifyjs": "~2.3.6",
+    "uglify-js": "~2.4.8"
+  },
   "npmName": "bitcoinprices",
-  "npmFileMap": [{
-    "basePath": "/",
-    "files": [
-      "*.js",
-      "LICENSE.txt"
-    ]
-  }]
+  "npmFileMap": [
+    {
+      "basePath": "/dist",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
 }
