@@ -16,8 +16,27 @@
     "market data",
     "currency"
   ],
-  "author": "Mikko Ohtamaa",
+  "author": "Mikko Ohtamaa <mikko@opensourcehacker.com> (http://opensourcehacker.com)",
   "license": "MIT",
   "readmeFilename": "README.rst",
-  "gitHead": "e82642f0316f9391502a26cedffced0cee0b7366"
+  "gitHead": "e82642f0316f9391502a26cedffced0cee0b7366",
+
+  "devDependencies": { "mocha": "~1.7.4" },
+  "testling": {
+    "browsers": [
+        "ie9", "ie10", "ie11",
+        "firefox/15", "chrome/22", "opera/12", "safari/5.1"
+    ],
+    "harness" : "mocha",
+    "files": "test.js"
+  },
+
+  "npmName": "bitcoinprices",
+  "npmFileMap": [{
+    "basePath": "/",
+    "files": [
+      "*.js",
+      "LICENSE.txt"
+    ]
+  }]
 }

@@ -28,6 +28,9 @@ Features
 
 * Manual currency conversions
 
+
+See also the sister project `bitcoinaaddress.js for making bitcoin payments and QR codes <https://github.com/miohtama/bitcoinaddress.js>`_.
+
 Demos
 ------
 
@@ -110,6 +113,9 @@ Other
 ------
 
 `See also server-side Python implementation for converting Bitcoin prices <https://gist.github.com/miohtama/7814435>`_.
+
+I have not completely figured out how to make a module which has a UMD + dependency to jQuery, so
+that all `browserify <http://browserify.org/>`_ users would be happy with the released packages. Tips welcome.
 
 Author
 ------
