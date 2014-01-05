@@ -3,7 +3,7 @@
 Introduction
 ---------------
 
-**bitcoinprices.js** is a Javascript library for presenting Bitcoin prices in human-friendly manner.
+**bitcoinprices.js** is a JavaScript library for presenting Bitcoin prices with currency conversion.
 
 Example:
 
@@ -28,6 +28,7 @@ Features
 
 * Manual currency conversions
 
+* `npm packaged for browserify consumption <>´_.
 
 See also the sister project `bitcoinaaddress.js for making bitcoin payments and QR codes <https://github.com/miohtama/bitcoinaddress.js>`_.
 

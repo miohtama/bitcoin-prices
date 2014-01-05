@@ -15,3 +15,6 @@ distribution:
 
 test:
 	$(BIN)/mocha-phantomjs tests/tests.html
+
+publish:
+	echo "Just run $(BIN)/npm-release <newversion>"
