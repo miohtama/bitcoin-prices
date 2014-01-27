@@ -21,14 +21,19 @@
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('jQuery'));
+        // jQuery(window) is jQuery 2.1+
+        module.exports = factory(require('jquery/dist/jquery')(window));
     } else {
         // Browser globals (root is window)
         root.bitcoinprices = factory(root.jQuery);
     }
-}(this, function ($) {
+}(this, function (jQuery) {
 
     "use strict";
+
+    // Store jQuery locally, so we can override it
+    // with an external option
+    var $ = jQuery;
 
     return {
 
@@ -335,6 +340,12 @@
 
             var self = this;
             this.config = _config;
+
+            // Allow jQuery override
+            // (solves many problems with require() jQuery includes)
+            if(this.config.jQuery) {
+                $ = this.config.jQuery;
+            }
 
             if(this.config.url) {
                 // Chec we are not running headless testing mode

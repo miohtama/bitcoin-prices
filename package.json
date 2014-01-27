@@ -30,7 +30,7 @@
   "npmName": "bitcoinprices",
   "npmFileMap": [
     {
-      "basePath": "/dist",
+      "basePath": "/dist/",
       "files": [
         "*.js"
       ]

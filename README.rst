@@ -79,7 +79,13 @@ making price switching logic to work::
 
                     // Build Bootstrap dropdown menu for currency switching
                     menu : true,
-                }
+                },
+
+                // Allows passing the explicit jQuery version to bitcoinprices.
+                // This is useful if you are using modular javascript (AMD/UMD/require()),
+                // but for most normal usage you don't need this
+                jQuery: jQuery
+
             });
         });
     </script>
