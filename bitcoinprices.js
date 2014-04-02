@@ -35,6 +35,42 @@
     // with an external option
     var $ = jQuery;
 
+    // Defaults
+    var defaultConfig = {
+
+        // Where we get bitcoinaverage data
+        // or null if we run headless (not in browser)
+        url: "https://api.bitcoinaverage.com/ticker/all",
+
+        // Which of bitcoinaverages value we use to present prices
+        marketRateVariable: "24h_avg",
+
+        // Which currencies are in shown to the user
+        currencies: ["BTC", "USD", "EUR", "CNY"],
+
+        // Special currency symbol artwork
+        symbols: {},
+
+        // Which currency we show user by the default if
+        // no currency is selected
+        defaultCurrency: "BTC",
+
+        // How the user is able to interact with the prices
+        ux : {
+            // Make everything with data-btc-price HTML attribute clickable
+            clickPrices : true,
+
+            // Build Bootstrap dropdown menu for currency switching
+            menu : true
+        },
+
+        // Price source data attribute
+        priceAttribute: "data-btc-price",
+
+        // Price source currency
+        priceOrignalCurrency: "BTC"
+    };
+
     return {
 
         /** Store exchange rate data as returned by bitcoinaverages.com */
@@ -170,11 +206,12 @@
 
             var self = this;
             var currentCurrency = this.getActiveCurrency();
+            var config = this.config;
 
             // Find all elements which declare themselves to present BTC prices
-            $("[data-btc-price]").each(function() {
+            $("[" + config.priceAttribute + "]").each(function() {
                 var elem = $(this);
-                var btcPrice = elem.attr("data-btc-price");
+                var btcPrice = elem.attr(config.priceAttribute);
                 try {
                     btcPrice = parseFloat(btcPrice, 10);
                 } catch(e) {
@@ -184,7 +221,7 @@
                 }
 
                 var priceSymbol = elem.attr("data-price-symbol") != "off";
-                var inCurrentCurrency = self.convert(btcPrice, "BTC", currentCurrency);
+                var inCurrentCurrency = self.convert(btcPrice, config.priceOrignalCurrency, currentCurrency);
 
                 elem.html(self.formatPrice(inCurrentCurrency, currentCurrency, priceSymbol));
 
@@ -248,7 +285,7 @@
 
             // We have now market data available,
             // decoreate elements so the user knows there is interaction
-            $("[data-btc-price]").addClass("clickable-price");
+            $("[" + this.config.priceAttribute + "]").addClass("clickable-price");
             $(".current-currency-symbol").addClass("clickable-price");
             $(".clickable-price").click(onclick);
         },
@@ -339,13 +376,14 @@
             }
 
             var self = this;
-            this.config = _config;
 
             // Allow jQuery override
             // (solves many problems with require() jQuery includes)
-            if(this.config.jQuery) {
-                $ = this.config.jQuery;
+            if(_config.jQuery) {
+                $ = _config.jQuery;
             }
+
+            this.config = $.extend({}, defaultConfig, _config);
 
             if(this.config.url) {
                 // Chec we are not running headless testing mode
