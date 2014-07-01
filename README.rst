@@ -37,6 +37,8 @@ Demos
 
 `Demo with clickable bitcoin prices, bitcoin price menu and manu bitcoin price conversion <http://miohtama.github.com/bitcoin-prices/index.html>`_.
 
+`BitWatcher <http://bitwatcher.me/>`_ 
+
 Installation
 -------------
 
