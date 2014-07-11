@@ -46,7 +46,7 @@ You manually need to call `bitcoinprices.init()` to trigger the loading of excha
 making price switching logic to work:
 
 
-```
+```html
 <script src="bitcoinprices.js"></script>
 <script>
     $(document).ready(function() {
@@ -106,12 +106,12 @@ All configuration parameters can be omitted. Then defaults from bitcoinprices.js
 is used (`defaultConfig` variable).
 
 
-## it works
+## How it works
 
 Your templating language must output Bitcoin prices with  attribute:
 
 
-```
+```html
 <p>
     <div>Example price: <span data-btc-price="1.0">1.0 BTC</span></div>
 </p>
@@ -146,7 +146,7 @@ Change UberCart templates to output price as `data-price-usd` attribute.
 Example modification to `node--production.tpl.php`:
 
 
-```
+```html
 $usd_price = round(render($content['sell_price']['#value']) , 2);
 
 <span data-price-usd="<?=$usd_price ?>"><?=$usd_price ?></span>
@@ -159,7 +159,7 @@ exchange rates have been downloaded from bitcoinaverage). `clickable-price` CSS 
 automatically you don't need to add it to your templates:
 
 
-```
+```css
 .clickable-price {
     cursor: pointer;
     border-bottom: 1px #888 dashed;
@@ -169,7 +169,7 @@ automatically you don't need to add it to your templates:
 Include an initialization JavaScript snippet as a separate JS file:
 
 
-```
+```javascript
 /**
  * Drupal + Ubercart integration for bitcoinprices.js
  *
