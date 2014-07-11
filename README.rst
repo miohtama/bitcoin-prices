@@ -28,7 +28,7 @@ Features
 
 * Manual currency conversions
 
-* `npm packaged for browserify consumption <>´_.
+* `npm packaged for browserify consumption <https://www.npmjs.org/package/bitcoinprices>´_.
 
 See also the sister project `bitcoinaaddress.js for making bitcoin payments and QR codes <https://github.com/miohtama/bitcoinaddress.js>`_.
 
@@ -37,7 +37,7 @@ Demos
 
 `Demo with clickable bitcoin prices, bitcoin price menu and manu bitcoin price conversion <http://miohtama.github.com/bitcoin-prices/index.html>`_.
 
-`BitWatcher <http://bitwatcher.me/>`_ 
+`BitWatcher <http://bitwatcher.me/>`_
 
 Installation
 -------------
@@ -81,6 +81,10 @@ making price switching logic to work::
 
                     // Build Bootstrap dropdown menu for currency switching
                     menu : true,
+
+                    // Allow user to cycle through currency choices in currency:
+
+                    clickableCurrencySymbol:  true
                 },
 
                 // Allows passing the explicit jQuery version to bitcoinprices.
@@ -129,6 +133,13 @@ Your templating language must output Bitcoin prices with `data-btc-price` attrib
 
 It is suggested that you cache bitcoinaverage.com API output on a local server with proper
 cache headers. This may considerably speed up your site and reduces bitcoinaverage.com load.
+
+Liberty Music Store
+---------------------
+
+`Liberty Music Store is an online store which allows musicians to sell their songs and receive Bitcoins. <https://libertymusicstore.net/>`_.
+
+`The source of Liberty Music Store is on Github <https://github.com/miohtama/LibertyMusicStore>`_, so you can check from the source code how the integration has been done.
 
 Drupal + UberCart integration
 -------------------------------
@@ -214,9 +225,6 @@ Other
 ------
 
 `See also server-side Python implementation for converting Bitcoin prices <https://gist.github.com/miohtama/7814435>`_.
-
-I have not completely figured out how to make a module which has a UMD + dependency to jQuery, so
-that all `browserify <http://browserify.org/>`_ users would be happy with the released packages. Tips welcome.
 
 Author
 ------

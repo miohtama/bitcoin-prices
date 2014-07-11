@@ -1,6 +1,6 @@
 {
   "name": "bitcoinprices",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "bitcoinprices.js is a JavaScript library for presenting Bitcoin prices with currency conversion",
   "main": "bitcoinprices.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "bitcoin",
     "exchange rate",
     "market data",
-    "currency"
+    "currency",
+    "bitcoinaverage"
   ],
   "author": "Mikko Ohtamaa <mikko@opensourcehacker.com> (http://opensourcehacker.com)",
   "license": "MIT",
