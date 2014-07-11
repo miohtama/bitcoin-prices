@@ -51,6 +51,10 @@
         // Special currency symbol artwork
         symbols: {},
 
+        // CSS selector Which prices we make clickable on the page
+        // If null defaults to [data-btc-price] (attribute match)
+        clickablePriceSelector: null,
+
         // Which currency we show user by the default if
         // no currency is selected
         defaultCurrency: "BTC",
@@ -61,7 +65,10 @@
             clickPrices : true,
 
             // Build Bootstrap dropdown menu for currency switching
-            menu : true
+            menu : true,
+
+            // Allow user to cycle through currency choices in Currency: USD quick menu
+            clickableCurrencySymbol:  true
         },
 
         // Price source data attribute
@@ -285,8 +292,13 @@
 
             // We have now market data available,
             // decoreate elements so the user knows there is interaction
-            $("[" + this.config.priceAttribute + "]").addClass("clickable-price");
-            $(".current-currency-symbol").addClass("clickable-price");
+            var clickablePriceSelector = this.config.clickablePriceSelector || "[" + this.config.priceAttribute + "]";
+            $(clickablePriceSelector).addClass("clickable-price");
+
+            if(this.config.ux.clickableCurrencySymbol) {
+                $(".current-currency-symbol").addClass("clickable-price");
+            }
+
             $(".clickable-price").click(onclick);
         },
 
