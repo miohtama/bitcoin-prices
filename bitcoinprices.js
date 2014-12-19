@@ -35,6 +35,36 @@
     // with an external option
     var $ = jQuery;
 
+
+    // Persist last selected currency, when available.
+    var lastCurrency;
+    var hasLocalStorage = function() {
+        try {
+            var testValue = "testValue"
+            localStorage.setItem(testValue, testValue);
+            localStorage.removeItem(testValue);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    var getPersistedCurrency = function() {
+        if (hasLocalStorage()) {
+            return window.localStorage["bitcoinprices.currency"];
+        } else {
+            return lastCurrency;
+        }
+    }
+
+    var setPersistedCurrency = function(currency) {
+        if (hasLocalStorage()) {
+            window.localStorage["bitcoinprices.currency"] = currency;
+        } else {
+            lastCurrency = currency;
+        }
+    }
+
     // Defaults
     var defaultConfig = {
 
@@ -246,7 +276,7 @@
          * Get the currency selected by the user.
          */
         getActiveCurrency : function() {
-            return window.localStorage["bitcoinprices.currency"] || this.config.defaultCurrency || "BTC";
+            return getPersistedCurrency() || this.config.defaultCurrency || "BTC";
         },
 
         /**
@@ -256,7 +286,7 @@
             var currency = this.getActiveCurrency();
             var idx = $.inArray(currency, this.config.currencies);
             if(idx < 0) {
-                window.localStorage["bitcoinprices.currency"] = "BTC";
+                setPersistedCurrency("BTC");
             }
         },
 
@@ -274,7 +304,8 @@
             }
             idx = (++idx) % this.config.currencies.length;
 
-            currency = window.localStorage["bitcoinprices.currency"] = this.config.currencies[idx];
+            currency = this.config.currencies[idx]
+            setPersistedCurrency(currency);
 
             return currency;
         },
@@ -344,7 +375,7 @@
 
             menu.on("click", ".currency-menu-entry", function(e) {
                 var currency = $(this).attr("data-currency");
-                window.localStorage["bitcoinprices.currency"] = currency;
+                setPersistedCurrency(currency);
                 $(document).trigger("activecurrencychange");
             });
 
