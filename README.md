@@ -219,6 +219,31 @@ Include an initialization JavaScript snippet as a separate JS file:
 })(jQuery);
 ```
 
+## Integration with Jekyll
+
+Include `bitcoinprices.js` in your footer.
+
+Add the initialization JavaScript snippet from previous section.
+
+Create a new field for the price in your front matter:
+
+```
+---
+layout: default
+description: Joomla shared hosting. Paid with Bitcoin.
+type: Joomla!
+price: 0.007
+---
+```
+
+In your `_include` file call this field from a html `data` attribute:
+
+```
+<li>Monthly<br>
+  <span data-btc-price="{{ post.price }}"></span><br>paid in Bitcoin<br>
+  <small>Click on the price to loop though currencies</small>
+</li>
+```
 
 ## Author
 
